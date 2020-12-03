@@ -16,18 +16,30 @@
 </template>
 
 <script>
-import { inject } from 'vue'
+import { computed, inject, provide, ref } from 'vue'
 import TodoItem from './TodoItem.vue'
 import TodoFooter from './TodoFooter.vue'
 import TodoFiltro from './TodoFiltro.vue'
 export default {
   components: { TodoItem, TodoFooter, TodoFiltro },
   setup(){
-      const todos = inject('todos')
+      const tt = inject('todos')
+      const estado = ref('all')
+      const todos     = computed(( )=> {
+          if( estado.value === 'all' ){
+              return tt.value
+          }else if( estado.value === 'active' ){
+              return tt.value.filter( item => item.estado === false )
+          }else if( estado.value === 'complete'){
+              return tt.value.filter( item => item.estado === true )
+          }
+    })
 
-      return{todos}
+    provide('estado', estado) 
+    return{todos}
   }
 }
+
 </script>
 
 <style>
