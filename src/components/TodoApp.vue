@@ -14,10 +14,15 @@ export default {
   components: { TodoForm, TodoList },
   setup(){
       const todos = ref( [] )
-      provide( 'todos', todos ) 
+      provide( 'todos', todos )
+      if( localStorage.getItem('todos') ){
+          todos.value = JSON.parse( localStorage.getItem('todos'))
+      }
+
       watchEffect(()=> {
           console.log( todos.value.length )
           console.log( todos.value )
+          localStorage.setItem('todos', JSON.stringify( todos.value ))
       })
 
   } 
